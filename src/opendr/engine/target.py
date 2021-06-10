@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import numpy as np
+from typing import Optional, Dict
 
 
 class BaseTarget:
@@ -148,14 +149,15 @@ class BoundingBox(Target):
     This target is used for 2D Object Detection.
     A bounding box is described by the left-top corner and its width and height.
     """
+
     def __init__(
-        self,
-        name,
-        left,
-        top,
-        width,
-        height,
-        score=0,
+            self,
+            name,
+            left,
+            top,
+            width,
+            height,
+            score=0,
     ):
         super().__init__()
         self.name = name
@@ -199,16 +201,16 @@ class BoundingBoxList(Target):
     This target is used for 2D Object Detection.
     A bounding box is described by the left-top corner and its width and height.
     """
+
     def __init__(
-        self,
-        boxes,
+            self,
+            boxes,
     ):
         super().__init__()
         self.data = boxes
         self.confidence = np.mean([box.confidence for box in self.data])
 
     def mot(self, with_confidence=True):
-
         result = np.array([
             box.mot(with_confidence) for box in self.data
         ])
@@ -237,16 +239,17 @@ class TrackingAnnotation(Target):
     This target is used for 2D Object Tracking.
     A tracking bounding box is described by id, the left-top corner and its width and height.
     """
+
     def __init__(
-        self,
-        name,
-        left,
-        top,
-        width,
-        height,
-        id,
-        score=0,
-        frame=-1,
+            self,
+            name,
+            left,
+            top,
+            width,
+            height,
+            id,
+            score=0,
+            frame=-1,
     ):
         super().__init__()
         self.name = name
@@ -309,9 +312,10 @@ class TrackingAnnotationList(Target):
     This target is used for 2D Object Tracking.
     A bounding box is described by the left and top corners and its width and height.
     """
+
     def __init__(
-        self,
-        boxes,
+            self,
+            boxes,
     ):
         super().__init__()
         self.data = boxes
@@ -326,7 +330,6 @@ class TrackingAnnotationList(Target):
         return TrackingAnnotationList(boxes)
 
     def mot(self, with_confidence=True):
-
         result = np.array([
             box.mot(with_confidence) for box in self.data
         ])
@@ -551,19 +554,20 @@ class TrackingAnnotation3D(BoundingBox3D):
     truncation (truncated) and occlusion (occluded) levels, the name of an object (name) and
     observation angle of an object (alpha).
     """
+
     def __init__(
-        self,
-        name,
-        truncated,
-        occluded,
-        alpha,
-        bbox2d,
-        dimensions,
-        location,
-        rotation_y,
-        id,
-        score=0,
-        frame=-1,
+            self,
+            name,
+            truncated,
+            occluded,
+            alpha,
+            bbox2d,
+            dimensions,
+            location,
+            rotation_y,
+            id,
+            score=0,
+            frame=-1,
     ):
         self.data = {
             "name": name,
@@ -580,7 +584,6 @@ class TrackingAnnotation3D(BoundingBox3D):
         self.confidence = score
 
     def kitti(self, with_tracking_info=True):
-
         result = {}
 
         result["name"] = np.array([self.data["name"]])
@@ -630,9 +633,10 @@ class TrackingAnnotation3DList(Target):
     truncation (truncated) and occlusion (occluded) levels, the name of an object (name) and
     observation angle of an object (alpha).
     """
+
     def __init__(
-        self,
-        tracking_bounding_boxes_3d
+            self,
+            tracking_bounding_boxes_3d
     ):
         super().__init__()
         self.data = tracking_bounding_boxes_3d
@@ -758,3 +762,68 @@ class SpeechCommand(Target):
             return f"Class {self.data} speech command with confidence {self.confidence}"
         else:
             return f"Class {self.data} speech command"
+
+
+#ToDo: Inherit from Target class
+class Heatmap():
+    """
+    This target is used for multi-class segmentation problems or multi-class problems that require heatmap annotations.
+    """
+
+    def __init__(self,
+                 data: np.ndarray,
+                 description: Optional[str] = None,
+                 class_names: Optional[Dict[int, str]] = None):
+        # super().__init__()
+        self._data = None
+        self._description = None
+        self._class_names = None
+
+        self.data = data
+        if description is not None:
+            self.description = description
+        if class_names is not None:
+            self.class_names = class_names
+
+    @property
+    def data(self) -> np.ndarray:
+        if self._data is None:
+            raise ValueError('Data is empty.')
+        return self._data
+
+    @data.setter
+    def data(self, data):
+        if not isinstance(data, np.ndarray) or data.dtype != np.uint8:
+            raise TypeError('Data must be a numpy array of type uint8.')
+        self._data = data
+
+    @property
+    def description(self) -> str:
+        return self._description
+
+    @description.setter
+    def description(self, description: str):
+        if not isinstance(description, str):
+            raise TypeError('Description must be a string.')
+        self._description = description
+
+    @property
+    def class_names(self) -> Dict[int, str]:
+        return self._class_names
+
+    @class_names.setter
+    def class_names(self, class_names: Dict[int, str]):
+        if not isinstance(class_names, dict):
+            raise TypeError('Class_names must be a dictionary.')
+        for key, value in class_names.items():
+            if not isinstance(key, int):
+                raise TypeError('Keys of class_names must be integers.')
+            if not isinstance(value, str):
+                raise TypeError('Values of class_names must be string.')
+        self._class_names = class_names
+
+    def shape(self):
+        return self.data.shape
+
+    def __str__(self):
+        return str(self.data)
