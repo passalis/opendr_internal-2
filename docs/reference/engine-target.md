@@ -277,3 +277,17 @@ The [SpeechCommand](#class_engine.target.SpeechCommand) class has the following 
 #### SpeechCommand(prediction, confidence=None)
 Construct a new [SpeechCommand](#class_engine.target.SpeechCommand) object based from *prediction*.
 *prediction* is expected to be an integer designating the class and optional *confidence* a float between 0 and 1.
+
+### class engine.target.Heatmap
+Bases: *ToDo: Inherit from engine.target.Target (issue #90)*
+
+This target is used for multi-class segmentation problems or multi-class problems that require heatmap annotations/outputs.
+
+The [Heatmap](#class_engine.target.Heatmap) class has the following public methods:
+#### Heatmap(data, description=None, class_names=None)
+  Construct a new [Heatmap](#class_engine.target.Heatmap) object based from *data*.
+  - *data* is expected to be a numpy array
+  - *description* is expected to be a string [optional]
+  - *class_names* is expected to be a dictionary and can be used for mapping class IDs (integer) to names (string) [optional]
+#### shape()
+  Returns the shape of the underlying *data* object.

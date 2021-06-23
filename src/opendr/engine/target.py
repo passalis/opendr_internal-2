@@ -149,15 +149,14 @@ class BoundingBox(Target):
     This target is used for 2D Object Detection.
     A bounding box is described by the left-top corner and its width and height.
     """
-
     def __init__(
-            self,
-            name,
-            left,
-            top,
-            width,
-            height,
-            score=0,
+        self,
+        name,
+        left,
+        top,
+        width,
+        height,
+        score=0,
     ):
         super().__init__()
         self.name = name
@@ -201,16 +200,16 @@ class BoundingBoxList(Target):
     This target is used for 2D Object Detection.
     A bounding box is described by the left-top corner and its width and height.
     """
-
     def __init__(
-            self,
-            boxes,
+        self,
+        boxes,
     ):
         super().__init__()
         self.data = boxes
         self.confidence = np.mean([box.confidence for box in self.data])
 
     def mot(self, with_confidence=True):
+
         result = np.array([
             box.mot(with_confidence) for box in self.data
         ])
@@ -239,17 +238,16 @@ class TrackingAnnotation(Target):
     This target is used for 2D Object Tracking.
     A tracking bounding box is described by id, the left-top corner and its width and height.
     """
-
     def __init__(
-            self,
-            name,
-            left,
-            top,
-            width,
-            height,
-            id,
-            score=0,
-            frame=-1,
+        self,
+        name,
+        left,
+        top,
+        width,
+        height,
+        id,
+        score=0,
+        frame=-1,
     ):
         super().__init__()
         self.name = name
@@ -312,10 +310,9 @@ class TrackingAnnotationList(Target):
     This target is used for 2D Object Tracking.
     A bounding box is described by the left and top corners and its width and height.
     """
-
     def __init__(
-            self,
-            boxes,
+        self,
+        boxes,
     ):
         super().__init__()
         self.data = boxes
@@ -330,6 +327,7 @@ class TrackingAnnotationList(Target):
         return TrackingAnnotationList(boxes)
 
     def mot(self, with_confidence=True):
+
         result = np.array([
             box.mot(with_confidence) for box in self.data
         ])
@@ -554,20 +552,19 @@ class TrackingAnnotation3D(BoundingBox3D):
     truncation (truncated) and occlusion (occluded) levels, the name of an object (name) and
     observation angle of an object (alpha).
     """
-
     def __init__(
-            self,
-            name,
-            truncated,
-            occluded,
-            alpha,
-            bbox2d,
-            dimensions,
-            location,
-            rotation_y,
-            id,
-            score=0,
-            frame=-1,
+        self,
+        name,
+        truncated,
+        occluded,
+        alpha,
+        bbox2d,
+        dimensions,
+        location,
+        rotation_y,
+        id,
+        score=0,
+        frame=-1,
     ):
         self.data = {
             "name": name,
@@ -584,6 +581,7 @@ class TrackingAnnotation3D(BoundingBox3D):
         self.confidence = score
 
     def kitti(self, with_tracking_info=True):
+
         result = {}
 
         result["name"] = np.array([self.data["name"]])
@@ -633,10 +631,9 @@ class TrackingAnnotation3DList(Target):
     truncation (truncated) and occlusion (occluded) levels, the name of an object (name) and
     observation angle of an object (alpha).
     """
-
     def __init__(
-            self,
-            tracking_bounding_boxes_3d
+        self,
+        tracking_bounding_boxes_3d
     ):
         super().__init__()
         self.data = tracking_bounding_boxes_3d
@@ -764,7 +761,8 @@ class SpeechCommand(Target):
             return f"Class {self.data} speech command"
 
 
-#ToDo: Inherit from Target class
+#ToDo: Inherit from Target class:
+# The problem is that the variables in Target are not masked private (leading underscore) preventing proper getter/setters
 class Heatmap():
     """
     This target is used for multi-class segmentation problems or multi-class problems that require heatmap annotations.
