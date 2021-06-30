@@ -761,8 +761,7 @@ class SpeechCommand(Target):
             return f"Class {self.data} speech command"
 
 
-#ToDo: Inherit from Target class:
-# The problem is that the variables in Target are not masked private (leading underscore) preventing proper getter/setters
+# ToDo: Inherit from Target class and merge with version proposed in the semantic segmentation branch
 class Heatmap():
     """
     This target is used for multi-class segmentation problems or multi-class problems that require heatmap annotations.
@@ -770,9 +769,8 @@ class Heatmap():
 
     def __init__(self,
                  data: np.ndarray,
-                 description: Optional[str] = None,
-                 class_names: Optional[Dict[int, str]] = None):
-        # super().__init__()
+                 description: Optional[str]=None,
+                 class_names: Optional[Dict[int, str]]=None):
         self._data = None
         self._description = None
         self._class_names = None
