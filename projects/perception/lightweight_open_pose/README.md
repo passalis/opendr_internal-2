@@ -12,3 +12,8 @@ More specifically, the following applications are provided:
 6. jetbot: A demo developed on Webots to demonstrate how OpenDR functionality can be used to provide a naive fall detector. This demo can be also directly used on an NVIDIA JetBot.
 
 Please use the `--device cpu` flag for the demos if you are running them on a machine without a CUDA-enabled GPU. The JetBot demo autodetects whether a GPU is available.
+
+
+
+[![Gradient](https://assets.paperspace.io/img/gradient-badge.svg)](https://github.com/passalis/opendr_internal-2/blob/master/projects/perception/lightweight_open_pose/demos/inference_tutorial.ipynb?runtime=opendr/opendr-toolkit:cpu_latest)
+
